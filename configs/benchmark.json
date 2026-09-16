@@ -1,0 +1,56 @@
+{
+  "status": "planned_candidates_filter_by_memory",
+  "seed": 42,
+  "batch_sizes": [
+    1,
+    4,
+    16,
+    32
+  ],
+  "head_pairs": [
+    [
+      32,
+      8
+    ],
+    [
+      16,
+      4
+    ],
+    [
+      8,
+      8
+    ],
+    [
+      8,
+      1
+    ]
+  ],
+  "head_dims": [
+    64,
+    128
+  ],
+  "seq_lens": [
+    128,
+    512,
+    2048,
+    8192
+  ],
+  "page_sizes": [
+    16,
+    32
+  ],
+  "dtypes": [
+    "float16",
+    "bfloat16"
+  ],
+  "num_splits": [
+    1,
+    2,
+    4,
+    8,
+    16
+  ],
+  "warmup": 25,
+  "repetitions": 100,
+  "rounds": 3
+}
