@@ -37,9 +37,9 @@ Document both performance gains and regressions, including the workloads and con
 
 * [x] RMSNorm
 * [x] Fused Residual Add + RMSNorm
-* [ ] SiLU × Mul
-* [ ] Contiguous KV GQA Decode
-* [ ] Online Softmax
+* [x] SiLU × Mul
+* [x] Contiguous KV GQA Decode
+* [x] Online Softmax
 * [ ] Split-KV
 * [ ] Paged Decode Attention
 * [ ] KV Cache Management
