@@ -48,42 +48,6 @@ def residual_rmsnorm_kernel(
         mask=mask
     )
 
-M,N=4096,128
-BLOCK_M=16
-x=torch.randn((M,N),device="cuda",dtype=torch.float16)
-weight=torch.randn((N),device="cuda",dtype=torch.float16)
-y=torch.empty_like(x)
-residual=torch.rand_like(x)
-z=torch.empty_like(x)
-grid=triton.cdiv(M,BLOCK_M)
-def run():
-    residual_rmsnorm_kernel[(grid,)](
-        x,weight,y,residual,z,N,BLOCK_M,
-        BLOCK_N=triton.next_power_of_2(N),
-        eps=1e-6
-    )
-
-z_ref=(x.float() + residual.float()).to(torch.float16)
-y_ref=torch.rms_norm(z_ref,(N,),weight=weight,eps=1e-6).to(torch.float16)
-
-run()
-
-ok1=torch.allclose(
-    z,
-    z_ref,
-    1e-3,
-    1e-3
-)
-print(ok1)
-
-ok2=torch.allclose(
-    y,
-    y_ref,
-    1e-3,
-    1e-3
-)
-print(ok2)
-
 
 # torch.cuda.synchronize()
 # torch.cuda.cudart().cudaProfilerStart()

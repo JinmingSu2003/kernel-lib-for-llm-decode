@@ -37,35 +37,3 @@ def softmax_kernel(X,OUT,
             out_base+row[:,None]*M+col,
             y
         )
-
-M,N=512,409600
-x=torch.randn((M,N),device="cuda",dtype=torch.float16)
-y=torch.zeros_like(x)
-y_ref=y
-block_n=4
-block_m=1024
-grid=triton.cdiv(M,block_n)
-def run():
-    softmax_kernel[(grid,)](
-        x,y,block_n,N,block_m,
-        num_warps=4
-    )
-
-def run_ref():
-    torch.softmax(x, dim=-1, out=y_ref)
-
-for _ in range (10):
-    run()
-    run_ref()
-
-torch.cuda.synchronize()
-
-torch_us = triton.testing.do_bench(run_ref) * 1000
-triton_us = triton.testing.do_bench(run) * 1000
-
-print(f"PyTorch Softmax: {torch_us:.3f} us")
-print(f"Triton  Softmax: {triton_us:.3f} us")
-print(f"加速比: {torch_us / triton_us:.2f}x")
-
-
-

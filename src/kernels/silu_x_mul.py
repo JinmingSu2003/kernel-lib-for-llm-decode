@@ -3,9 +3,6 @@ import torch.nn.functional as F
 import triton
 import triton.language as tl
 
-def siluxmul_ref(gate,up):
-    return F.silu(gate)*up
-
 @triton.jit
 def siluxmul_kernel(gate,up,out,
                     BLOCK_SIZE:tl.constexpr,
@@ -33,34 +30,6 @@ def siluxmul_kernel(gate,up,out,
         mask=mask
     )
 
-
-size=409600
-x=torch.randn(size,device="cuda",dtype=torch.float16)
-y=torch.empty_like(x)
-u=torch.rand_like(x)
-blocksize=1024
-grid=triton.cdiv(size,blocksize)
-
-def run():
-    siluxmul_kernel[(grid,)](
-        gate=x,
-        up=u,
-        out=y,
-        BLOCK_SIZE=blocksize,
-        size=size,
-        num_warps=4
-    )
-
-
-out1=siluxmul_ref(x,u)
-run()
-ok=torch.allclose(
-    y,
-    out1,
-    1e-3,
-    1e-3
-)
-print(ok)
 
 
 
