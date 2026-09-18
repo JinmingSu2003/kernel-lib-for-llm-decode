@@ -1,4 +1,5 @@
 > **Maintenance notice:** This project is no longer maintained. We recommend using **cudac** instead.
+
 A hands-on project focused on implementing and optimizing LLM decode kernels in Triton.
 * [x] RMSNorm
 * [x] Fused Residual Add + RMSNorm
